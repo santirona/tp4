@@ -1,3 +1,11 @@
+from Class_Proyectos import *
+import os.path
+
+
+
+
+
+
 
 
 
@@ -5,19 +13,24 @@
 
 def menu():
 
-    arr_proyectos = []
+    array_proyectos = []
+
+    nombre_archivo = "proyectos.csv"
 
     opciones = ("1", "2", "3", "4", "5", "6", "7", "8")
 
     menu1 = '\n1) Cargar proyectos\n2) Filtrar por tag\n3) Cantidad de proyectos por lenguaje\n4) Popularidad mensual'
-    menu2 = '\n5) Buscar un proyecto actualizado\n6) Guardar proyectos populares\n7) mostrar archivos populares\n8) Salir del programa'
+    menu2 = '\n5) Buscar un proyecto actualizado\n6) Guardar proyectos populares\n7) Mostrar archivos populares\n8) Salir del programa'
 
     opcion = 0
+
+    apertura = open("proyectos.csv", mode="rt", encoding="utf8")
 
     while opcion != "8":
 
         if opcion == "1":
-            pass
+            registros_cargados = cargar(apertura, array_proyectos, nombre_archivo)
+            print("La cantidad de registros cargargados fue de: ", registros_cargados)
 
         elif opcion == "2":
             pass
