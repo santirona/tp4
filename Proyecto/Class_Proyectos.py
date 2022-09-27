@@ -1,5 +1,5 @@
 import os.path
-
+import os
 
 
 class Proyectos:
@@ -15,18 +15,23 @@ class Proyectos:
 
 
 
-def cargar(apertura, arreglo, nombre_archivo):
+def cargar(arreglo, nombre_archivo):
+
     if not os.path.exists(nombre_archivo):
         print("\nNo existe el archivo...")
         return
 
-    contador_registros_cargador = 0
+    apertura = open(nombre_archivo, mode="rt", encoding="utf8")
+
+    cont_registros_cargados = 0
+    cont_registros_no_cargados = 0
 
     linea = apertura
 
     flag_primera = True
 
     while linea != "":
+
         if flag_primera:
             linea = apertura.readline()
             flag_primera = False
@@ -34,15 +39,28 @@ def cargar(apertura, arreglo, nombre_archivo):
 
         linea = apertura.readline()
         registro = recorrer_archivo(linea)
-        if registro.lenguaje != "":
-            contador_registros_cargador += 1
-            add_in_order(registro, arreglo)
 
-    return(contador_registros_cargador)
+        if registro.lenguaje != "":
+            repetido = buscar_repetidos(registro.repositorio, arreglo)
+
+            if not repetido:
+                cont_registros_cargados += 1
+                add_in_order(registro, arreglo)
+
+            else:
+                cont_registros_no_cargados += 1
+
+        else:
+            cont_registros_no_cargados += 1
+
+    apertura.close()
+
+    return cont_registros_cargados, cont_registros_no_cargados
 
 
 
 def recorrer_archivo(linea):
+
     vector = [""] * 8
     contador = 0
     var = ""
@@ -64,6 +82,7 @@ def recorrer_archivo(linea):
 
 
 def add_in_order(registro, vector):
+
     longitud = len(vector)
 
     posicion = longitud
@@ -105,6 +124,9 @@ def vectorizar(cadena):
 
     longitud = len(cadena)
 
+    if longitud == 0:
+        return vector
+
     var = ""
 
     for i in range(longitud):
@@ -120,3 +142,13 @@ def vectorizar(cadena):
             vector.append(var)
 
             return vector
+
+
+
+def buscar_repetidos(repositorio, vector):
+
+    for i in range(len(vector)):
+        if vector[i].repositorio == repositorio:
+            return True
+
+    return False
