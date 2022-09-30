@@ -1,4 +1,5 @@
 from Class_Proyectos import *
+from datetime import datetime
 import os.path
 import os
 
@@ -98,10 +99,40 @@ def representacion(likes):
     while estrellas != 0:
         contador += 10
 
-        if  likes - contador <= 0:
+        if likes - contador <= 0:
             string = str(contador)
             return string[0]
 
+def busqueda_proy_rep(array, variable):
+
+    izq = 0
+    der = len(array) - 1
+    pos = 0
+    while izq <= der:
+        pos = (izq+der)// 2
+        if variable == array[pos].repositorio:
+            return pos
+
+        if variable < array[pos].repositorio:
+            der = pos - 1
+        else:
+                izq = pos + 1
+    return -1
+
+
+
+
+
+def actualizar_proyecto(array,pos):
+    array[pos].url = input('Ingrese la nueva URL:')
+    aux = datetime.now()
+
+    if str(len(aux.mes)) == 1:
+        mes = '0' + str(aux.mes)
+    else:
+        mes = str(aux.mes)
+
+    array[pos].actualizacion = str(aux.year)+ '-' + mes + '-' + str(aux.day)
 
 
 def menu():
@@ -118,13 +149,13 @@ def menu():
     opcion = 0
 
 
+
     while opcion != "8":
 
         if opcion == "1":
             registros_cargados, registros_no_cargados = cargar(array_proyectos, nombre_archivo)
             print("\nLa cantidad de registros cargados fue de: ", registros_cargados)
             print("\nLa cantidad de registros NO cargados fue de: ", registros_no_cargados)
-
 
         elif opcion == "2":
             filtrar_por_tag(array_proyectos)
@@ -136,8 +167,12 @@ def menu():
             popularidad(array_proyectos)
 
         elif opcion == "5":
-            pass
-
+            repositorio = input('Ingrese el repositorio que quiere busacar: ')
+            posicion = busqueda_proy_rep(array_proyectos,repositorio)
+            if posicion != -1:
+                actualizar_proyecto(array_proyectos,posicion)
+            else:
+                print('El proyecto no existe!!!!')
         elif opcion == "6":
             pass
 
@@ -161,4 +196,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-###hola mundo

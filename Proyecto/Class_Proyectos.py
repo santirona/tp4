@@ -3,9 +3,10 @@ import os
 
 
 class Proyectos:
-    def __init__(self, usuario, descripcion, repositorio, actualizacion, lenguaje, likes, tags, url):
+    def __init__(self, usuario, repositorio, actualizacion,
+                 lenguaje, likes, tags, url):
+
         self.usuario = usuario
-        self.descripcion = descripcion
         self.repositorio = repositorio
         self.actualizacion = actualizacion
         self.lenguaje = lenguaje
@@ -14,6 +15,12 @@ class Proyectos:
         self.url = url
 
 
+    def __str__(self):
+
+        return self.repositorio
+    ##self.usuario + '-' + self.descripcion + '-' + self.repositorio + '-' + self.actualizacion + '-' + \
+               ###self.lenguaje + '-' + str(self.likes) + '-' + self.url +'\n'
+
 
 def cargar(arreglo, nombre_archivo):
 
@@ -21,14 +28,15 @@ def cargar(arreglo, nombre_archivo):
         print("\nNo existe el archivo...")
         return
 
-    apertura = open(nombre_archivo, mode="rt", encoding="utf8")
-
+    linea = None
     cont_registros_cargados = 0
     cont_registros_no_cargados = 0
 
-    linea = apertura
+
 
     flag_primera = True
+
+    apertura = open(nombre_archivo, mode="rt", encoding="utf8")
 
     while linea != "":
 
@@ -38,9 +46,12 @@ def cargar(arreglo, nombre_archivo):
             continue
 
         linea = apertura.readline()
+        if linea == '':
+            continue
         registro = recorrer_archivo(linea)
 
         if registro.lenguaje != "":
+
             repetido = buscar_repetidos(registro.repositorio, arreglo)
 
             if not repetido:
@@ -61,38 +72,55 @@ def cargar(arreglo, nombre_archivo):
 
 def recorrer_archivo(linea):
 
-    vector = [""] * 8
+    control = ('|','\n','')
+    flag = False
+    vector = [''] * 7
     contador = 0
-    var = ""
+    var = ''
 
     for i in linea:
-        if i != "|":
+        if not(i in control):
             var += i
 
         else:
-            vector[contador] = var
-            var = ""
+            if contador == 2:
+                flag = True
+                contador += 1
+                continue
+            if flag:
+                vector[contador-1] = var
+                var = ''
+            else:
+                vector[contador] = var
+                var = ''
+
             contador += 1
 
-    vector[5] = punto_flotante(vector[5])
-    vector[6] = vectorizar(vector[6])
-
-    return Proyectos(vector[0], vector[1], vector[2], vector[3], vector[4], vector[5], vector[6], vector[7])
+    vector[4] = punto_flotante(vector[4])
+    vector[5] = vectorizar(vector[5])
+    print(vector)
+    return Proyectos(vector[0], vector[1], vector[2], vector[3], vector[4], vector[5], vector[6])
 
 
 
 def add_in_order(registro, vector):
+    n = len(vector)
+    izq,der = 0, n-1
+    pos = n
 
-    longitud = len(vector)
-
-    posicion = longitud
-
-    for i in range(longitud):
-        if vector[i].repositorio > registro.repositorio:
-            posicion = i
+    while izq <= der:
+        c = (izq+der)// 2
+        if registro.repositorio == vector[c].repositorio:
+            pos = c
             break
+        if registro.repositorio < vector[c].repositorio:
+            der = c - 1
+        else:
+            izq = c + 1
+    if izq > der:
+        pos = izq
 
-    vector[posicion:posicion] = [registro]
+    vector[pos:pos] = [registro]
 
 
 
@@ -133,7 +161,6 @@ def vectorizar(cadena):
         if cadena[i] == ",":
             vector.append(var)
             var = ""
-
             continue
 
         var += cadena[i]
