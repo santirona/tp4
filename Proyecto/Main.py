@@ -1,7 +1,9 @@
 from Class_Proyectos import *
+from Class_matriz import *
 from datetime import datetime
 import os.path
 import os
+import pickle
 
 
 
@@ -38,7 +40,7 @@ def popularidad(vector):
 
     print("\nEl total de proyectos actualizados en el mes que selecciono es:", acumulador)
 
-
+    return matriz
 
 def lenguajes(vector):
 
@@ -132,23 +134,13 @@ def actualizar_proyecto(array,pos):
     array[pos].actualizacion = str(aux.year) + '-' + mes + '-' + str(aux.day)
 
 
-def guardar_populares(array):
-    matriz = [[0]]
-
-
-
-
-
-
-
-
-
 
 def menu():
 
     array_proyectos = []
 
     nombre_archivo = "proyectos.csv"
+    nombre_matriz = 'martriz_popularidad.txt'
 
     opciones = ("1", "2", "3", "4", "5", "6", "7", "8")
 
@@ -173,7 +165,7 @@ def menu():
             lenguajes(array_proyectos)
 
         elif opcion == "4":
-            popularidad(array_proyectos)
+            matriz_popularidad = popularidad(array_proyectos)
 
         elif opcion == "5":
             repositorio = input('Ingrese el repositorio que quiere busacar: ')
@@ -184,10 +176,10 @@ def menu():
                 print('El proyecto no existe!!!!')
 
         elif opcion == "6":
-            guardar_populares(array_proyectos)
+            guardar_populares(matriz_popularidad, nombre_matriz)
 
         elif opcion == "7":
-            pass
+            lectura_populares(nombre_matriz)
 
         print("\n","*" * 40, '¡Bienvenido al menú de opciones!', "*" * 40,"\n", menu1, menu2)
 
@@ -206,3 +198,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
