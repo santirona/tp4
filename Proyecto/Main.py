@@ -120,19 +120,28 @@ def busqueda_proy_rep(array, variable):
     return -1
 
 
-
-
-
 def actualizar_proyecto(array,pos):
-    array[pos].url = input('Ingrese la nueva URL:')
+    array[pos].url = input('Ingrese la nueva URL: ')
     aux = datetime.now()
 
-    if str(len(aux.mes)) == 1:
-        mes = '0' + str(aux.mes)
+    if len(str(aux.month)) == 1:
+        mes = '0' + str(aux.month)
     else:
-        mes = str(aux.mes)
+        mes = str(aux.mouth)
 
-    array[pos].actualizacion = str(aux.year)+ '-' + mes + '-' + str(aux.day)
+    array[pos].actualizacion = str(aux.year) + '-' + mes + '-' + str(aux.day)
+
+
+def guardar_populares(array):
+    matriz = [[0]]
+
+
+
+
+
+
+
+
 
 
 def menu():
@@ -173,8 +182,9 @@ def menu():
                 actualizar_proyecto(array_proyectos,posicion)
             else:
                 print('El proyecto no existe!!!!')
+
         elif opcion == "6":
-            pass
+            guardar_populares(array_proyectos)
 
         elif opcion == "7":
             pass

@@ -16,10 +16,13 @@ class Proyectos:
 
 
     def __str__(self):
+        tags = ''
+        for i in self.tags:
+            tags += i
 
-        return self.repositorio
-    ##self.usuario + '-' + self.descripcion + '-' + self.repositorio + '-' + self.actualizacion + '-' + \
-               ###self.lenguaje + '-' + str(self.likes) + '-' + self.url +'\n'
+        return self.usuario + '-' + self.repositorio + '-' +\
+        '-' + self.actualizacion + '-' + self.lenguaje + '-' +\
+        '-' + str(self.likes) + '-' + tags + self.url
 
 
 def cargar(arreglo, nombre_archivo):
@@ -98,7 +101,7 @@ def recorrer_archivo(linea):
 
     vector[4] = punto_flotante(vector[4])
     vector[5] = vectorizar(vector[5])
-    print(vector)
+
     return Proyectos(vector[0], vector[1], vector[2], vector[3], vector[4], vector[5], vector[6])
 
 
@@ -109,7 +112,7 @@ def add_in_order(registro, vector):
     pos = n
 
     while izq <= der:
-        c = (izq+der)// 2
+        c = (izq+der) // 2
         if registro.repositorio == vector[c].repositorio:
             pos = c
             break
@@ -138,9 +141,7 @@ def punto_flotante(string):
 
         valor_flotante += string[i]
 
-
     float(valor_flotante)
-
 
     return valor_flotante
 
