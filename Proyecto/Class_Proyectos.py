@@ -21,8 +21,8 @@ class Proyectos:
             tags += i
 
         return self.usuario + '-' + self.repositorio + '-' +\
-        '-' + self.actualizacion + '-' + self.lenguaje + '-' +\
-        '-' + str(self.likes) + '-' + tags + self.url
+          self.actualizacion + '-' + self.lenguaje + '-' +\
+          str(self.likes) + '-' + tags + self.url
 
 
 def cargar(arreglo, nombre_archivo):
@@ -89,6 +89,7 @@ def recorrer_archivo(linea):
             if contador == 2:
                 flag = True
                 contador += 1
+                var = ''
                 continue
             if flag:
                 vector[contador-1] = var

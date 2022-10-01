@@ -19,10 +19,11 @@ def buscador_meses(proyecto):
 
 
 def popularidad(vector):
+
     matriz = [[0]*5 for i in range(12)]
 
     for i in range(len(vector)):
-        matriz[int(buscador_meses(vector[i])) - 1][int(representacion(vector[i].likes))- 1] += 1
+        matriz[int(buscador_meses(vector[i])) - 1][int(representacion(vector[i].likes)) - 1] += 1
 
     m = int(input("\nIngrese un mes que desee ver la totalidad de sus proyectos: "))
 
@@ -72,11 +73,11 @@ def lenguajes(vector):
 
 def filtrar_por_tag(vector):
 
-    tag = str(input("\nIngrese la tag para filtrar los proyectos con esta: "))
+    tag = input("\nIngrese la tag para filtrar los proyectos con esta: ")
 
     for i in range(len(vector)):
         if tag in vector[i].tags:
-            print(f"Repositorio: {vector[i].repositorio :<130}"
+            print(f"Repositorio: {vector[i].repositorio :<35}"
                   f"Fecha: {vector[i].actualizacion :<20}"
                   f"Estrella/s: {representacion(vector[i].likes) :<15}")
 
@@ -140,7 +141,7 @@ def menu():
     array_proyectos = []
 
     nombre_archivo = "proyectos.csv"
-    nombre_matriz = 'martriz_popularidad.txt'
+    nombre_matriz = 'martriz.dat'
 
     opciones = ("1", "2", "3", "4", "5", "6", "7", "8")
 
@@ -157,7 +158,8 @@ def menu():
             registros_cargados, registros_no_cargados = cargar(array_proyectos, nombre_archivo)
             print("\nLa cantidad de registros cargados fue de: ", registros_cargados)
             print("\nLa cantidad de registros NO cargados fue de: ", registros_no_cargados)
-
+            #for i in range(len(array_proyectos)):
+                #print(array_proyectos[i])
         elif opcion == "2":
             filtrar_por_tag(array_proyectos)
 
