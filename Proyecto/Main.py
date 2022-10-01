@@ -36,12 +36,23 @@ def popularidad(vector):
     for i in range(5):
         acumulador += matriz[m][i]
 
+    mes_contador = 1
+
+    print("Mes", "    Estrellas")
+    print("\n	    🌟  🌟  🌟  🌟  🌟")
+
     for fila in matriz:
-        print(*fila, sep=" - ")
+        if mes_contador < 10:
+            print(mes_contador, " ",*fila, sep=" - ")
+        else:
+            print(mes_contador, "",*fila, sep=" - ")
+        mes_contador += 1
 
     print("\nEl total de proyectos actualizados en el mes que selecciono es:", acumulador)
 
     return matriz
+
+
 
 def lenguajes(vector):
 
@@ -74,6 +85,7 @@ def lenguajes(vector):
 def filtrar_por_tag(vector):
 
     tag = input("\nIngrese la tag para filtrar los proyectos con esta: ")
+    print("")
 
     for i in range(len(vector)):
         if tag in vector[i].tags:
@@ -81,11 +93,30 @@ def filtrar_por_tag(vector):
                   f"Fecha: {vector[i].actualizacion :<20}"
                   f"Estrella/s: {representacion(vector[i].likes) :<15}")
 
-    opcion = str(input("¿Desea almacenar almacenar este listado? S/N: "))
+    opcion = input("\n¿Desea almacenar almacenar este listado? S/N: ")
 
-    if opcion == "S" or opcion == "s":
-        pass
-        #ultima parte del punto 2 hay que hacer aca
+    return opcion, tag
+
+
+
+def guardar_filtrados(vector, tag, archivo):
+
+    linea = None
+
+    apertura = open(archivo, mode="wt")
+
+    apertura.write("nombre_usuario|repositorio|fecha_actualizacion|lenguaje|estrellas|tags|url\n")
+
+    for i in range(len(vector)):
+        pos = vector[i]
+
+        if tag in pos.tags:
+            linea = str(pos.usuario) + "|" + str(pos.repositorio) + "|" + str(pos.actualizacion) + "|"\
+            + str(pos.lenguaje) + "|" + str(pos.likes) + "k|" + str(pos.tags) + "|" + str(pos.url) + "\n"
+
+            apertura.write(linea)
+
+    apertura.close()
 
 
 
@@ -106,6 +137,8 @@ def representacion(likes):
             string = str(contador)
             return string[0]
 
+
+
 def busqueda_proy_rep(array, variable):
 
     izq = 0
@@ -123,6 +156,7 @@ def busqueda_proy_rep(array, variable):
     return -1
 
 
+
 def actualizar_proyecto(array,pos):
     array[pos].url = input('Ingrese la nueva URL: ')
     aux = datetime.now()
@@ -130,7 +164,7 @@ def actualizar_proyecto(array,pos):
     if len(str(aux.month)) == 1:
         mes = '0' + str(aux.month)
     else:
-        mes = str(aux.mouth)
+        mes = str(aux.month)
 
     array[pos].actualizacion = str(aux.year) + '-' + mes + '-' + str(aux.day)
 
@@ -141,6 +175,7 @@ def menu():
     array_proyectos = []
 
     nombre_archivo = "proyectos.csv"
+    nombre_tags = "tags.dat"
     nombre_matriz = 'martriz.dat'
 
     opciones = ("1", "2", "3", "4", "5", "6", "7", "8")
@@ -150,6 +185,8 @@ def menu():
 
     opcion = 0
 
+    flag_4 = False
+
 
 
     while opcion != "8":
@@ -158,27 +195,33 @@ def menu():
             registros_cargados, registros_no_cargados = cargar(array_proyectos, nombre_archivo)
             print("\nLa cantidad de registros cargados fue de: ", registros_cargados)
             print("\nLa cantidad de registros NO cargados fue de: ", registros_no_cargados)
-            #for i in range(len(array_proyectos)):
-                #print(array_proyectos[i])
+
         elif opcion == "2":
-            filtrar_por_tag(array_proyectos)
+            opcion, tag = filtrar_por_tag(array_proyectos)
+            if opcion == "S" or opcion == "s":
+                guardar_filtrados(array_proyectos, tag, nombre_tags)
 
         elif opcion == "3":
             lenguajes(array_proyectos)
 
         elif opcion == "4":
             matriz_popularidad = popularidad(array_proyectos)
+            flag_4 = True
 
         elif opcion == "5":
             repositorio = input('Ingrese el repositorio que quiere busacar: ')
             posicion = busqueda_proy_rep(array_proyectos,repositorio)
+
             if posicion != -1:
                 actualizar_proyecto(array_proyectos,posicion)
             else:
                 print('El proyecto no existe!!!!')
 
         elif opcion == "6":
-            guardar_populares(matriz_popularidad, nombre_matriz)
+            if flag_4:
+                guardar_populares(matriz_popularidad, nombre_matriz)
+            else:
+                print("Primero debe crear la matriz en la opcion 4.")
 
         elif opcion == "7":
             lectura_populares(nombre_matriz)

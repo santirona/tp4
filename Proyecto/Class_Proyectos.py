@@ -2,6 +2,7 @@ import os.path
 import os
 
 
+
 class Proyectos:
     def __init__(self, usuario, repositorio, actualizacion,
                  lenguaje, likes, tags, url):
@@ -25,6 +26,7 @@ class Proyectos:
           str(self.likes) + '-' + tags + self.url
 
 
+
 def cargar(arreglo, nombre_archivo):
 
     if not os.path.exists(nombre_archivo):
@@ -34,8 +36,6 @@ def cargar(arreglo, nombre_archivo):
     linea = None
     cont_registros_cargados = 0
     cont_registros_no_cargados = 0
-
-
 
     flag_primera = True
 
